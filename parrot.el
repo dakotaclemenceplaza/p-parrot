@@ -1,0 +1,28 @@
+(defun start-parrot ()
+  "Party Parrot"
+  (interactive)
+  (setq length 1018 start 0 end (+ start length))
+  (switch-to-buffer "Parrot")
+  (setq winh (window-height) winw (window-width))
+  (while 1
+    (erase-buffer)
+    (newline (- (/ winh 2) 10))
+    (insert-file-contents "parrotframes" nil start end)
+    (setq parheight 19)
+    (while (> parheight 0)
+      (insert (make-string (- (/ winw 2) 25) ? ))
+      (forward-line)
+      (setq parheight (- parheight 1)))
+    (newline (- (/ winh 2) 10))
+    (goto-char (point-min))
+    (forward-line (- winh 5))
+    (insert (make-string (- (/ winw 2) 5) ? ))
+    (insert "C-g to stop")
+    (redisplay)
+    (if (= start 9162)
+	(setq start 0 end (+ start length))
+      (setq start (+ start length) end (+ end length)))
+    (sleep-for 0.07)))
+
+;for test
+(start-parrot)
