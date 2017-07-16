@@ -1,9 +1,11 @@
 (defun start-parrot (&optional arg)
   "Party Parrot"
-  (interactive "sf for fast, s for slow: ")
+  (interactive "sf for fast, s for slow, g for goth: ")
+  (setq goth nil)
   (setq slow nil)
   (cond ((string= arg "f") (setq speed 0.03))
 	((string= arg "s") (setq slow 1 speed 0.07))
+	((string= arg "g") (setq goth 1 speed 0.07))
 	(t (setq speed 0.07)))
   ;frame length
   (setq length 1018 start 0 end (+ start length))
@@ -15,7 +17,7 @@
     ;go down with newlines
     (newline (- (/ winh 2) 10))
     (insert-file-contents "parrotframes" nil start end)
-    ;make parrot appear at the middle
+    ;make parrot appear in the middle
     (setq parheight 19)
     (while (> parheight 0)
       ;insert empty strings to move parrot in the middle
@@ -23,15 +25,16 @@
       (forward-line)
       (setq parheight (- parheight 1)))
     ;make more newlines for text
-    (newline (- (/ winh 2) 10))
+    (newline (- (/ winh 2) 5))
     ;put text before the bottom end 
     (goto-char (point-min))
     (forward-line (- winh 5))
     (insert (make-string (- (/ winw 2) 5) ? ))
     (insert "C-g to stop")
-
-    (colorize-appropriate start)
-
+    ;colorize
+    (if goth
+	(add-face-text-property (point-min) (point-max) '(:foreground "#787B80" :weight bold))
+      (colorize-appropriate start))
     ;show everything
     (redisplay)
     ;keeping track of frames
@@ -42,6 +45,8 @@
       (setq start (+ start length) end (+ end length)))
     (sleep-for speed)))
 
+;function for color
+;choose-color holds a lambda which takes a color argument depending on frame
 (defun colorize-appropriate (start)
   (let ((choose-color
 	 (lambda (color)
