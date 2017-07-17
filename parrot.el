@@ -8,13 +8,13 @@
 	((string= arg "g") (setq goth 1 speed 0.07))
 	(t (setq speed 0.07)))
   ;frame length 
-  (setq length 1018 frame-start 0)
+  (setq length 1018 frame 0)
   (switch-to-buffer "Parrot")
   ;window sizes
   (setq winh (window-height) winw (window-width))
   (while 1
     (erase-buffer)
-    (draw-parrot frame-start)
+    (draw-parrot frame)
     ;make more newlines for text
     (newline (- (/ winh 2) 5))
     ;put text before the bottom end 
@@ -25,15 +25,15 @@
     ;colorize
     (if goth
 	(add-face-text-property (point-min) (point-max) '(:foreground "#787B80" :weight bold))
-      (colorize-appropriate frame-start))
+      (colorize-appropriate frame))
     ;show everything
     (redisplay) 
     ;keeping track of frames
-    (if (= frame-start 4);
+    (if (= frame 4);
 	(if slow (sleep-for 1)))
-    (if (= frame-start 9)
-	(setq frame-start 0)
-      (setq frame-start (1+ frame-start))
+    (if (= frame 9)
+	(setq frame 0)
+      (setq frame (1+ frame))
       (sleep-for speed))))
 
 (defun draw-parrot (frame &optional position)
