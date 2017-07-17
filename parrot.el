@@ -7,23 +7,14 @@
 	((string= arg "s") (setq slow 1 speed 0.07))
 	((string= arg "g") (setq goth 1 speed 0.07))
 	(t (setq speed 0.07)))
-  ;frame length
-  (setq length 1018 start 0 end (+ start length))
+  ;frame length 
+  (setq length 1018 frame-start 0)
   (switch-to-buffer "Parrot")
   ;window sizes
   (setq winh (window-height) winw (window-width))
   (while 1
     (erase-buffer)
-    ;go down with newlines
-    (newline (- (/ winh 2) 10))
-    (insert-file-contents "parrotframes" nil start end)
-    ;make parrot appear in the middle
-    (setq parheight 19)
-    (while (> parheight 0)
-      ;insert empty strings to move parrot in the middle
-      (insert (make-string (- (/ winw 2) 25) ? ))
-      (forward-line)
-      (setq parheight (- parheight 1)))
+    (draw-parrot frame-start)
     ;make more newlines for text
     (newline (- (/ winh 2) 5))
     ;put text before the bottom end 
@@ -34,16 +25,33 @@
     ;colorize
     (if goth
 	(add-face-text-property (point-min) (point-max) '(:foreground "#787B80" :weight bold))
-      (colorize-appropriate start))
+      (colorize-appropriate frame-start))
     ;show everything
-    (redisplay)
+    (redisplay) 
     ;keeping track of frames
-    (if (= start 4072)
+    (if (= frame-start 4);
 	(if slow (sleep-for 1)))
-    (if (= start 9162)
-	(setq start 0 end (+ start length))
-      (setq start (+ start length) end (+ end length)))
-    (sleep-for speed)))
+    (if (= frame-start 9)
+	(setq frame-start 0)
+      (setq frame-start (1+ frame-start))
+      (sleep-for speed))))
+
+(defun draw-parrot (frame &optional position)
+  (let ((parrotframe (read-frame-from-file frame))
+	(draw-frame
+	 (lambda (line-from-frame)
+	   (insert (make-string (- (/ winw 2) 25) ? ))
+	   (insert line-from-frame)
+	   (newline))))
+    (newline (- (/ winh 2) 10))
+    (mapc draw-frame parrotframe)))
+
+(defun read-frame-from-file (frame)
+  (let* ((start (* frame length))
+	 (end (+ start length)))
+    (with-temp-buffer
+      (insert-file-contents "parrotframes" nil start end)
+      (split-string (buffer-string) "\n" t))))
 
 ;function for color
 ;choose-color holds a lambda which takes a color argument depending on frame
@@ -51,15 +59,15 @@
   (let ((choose-color
 	 (lambda (color)
 	   (add-face-text-property (point-min) (point-max) `(:foreground ,color)))))
-    (cond ((or (= start 0) (= start 9162)) (funcall choose-color "#FDFA00"))
-	  ((= start 1018) (funcall choose-color "#00F800"))
-	  ((= start 2036) (funcall choose-color "#00A4A2"))
-	  ((= start 3054) (funcall choose-color "#4179B2"))
-          ((= start 4072) (funcall choose-color "#555AB4"))
-	  ((= start 5090) (funcall choose-color "#C22E9C"))
-	  ((= start 6108) (funcall choose-color "#E02C98"))
-	  ((= start 7126) (funcall choose-color "#FE40FD"))
-	  ((= start 8144) (funcall choose-color "#E07898")))))
+    (cond ((or (= start 0) (= start 10)) (funcall choose-color "#FDFA00"))
+	  ((= start 1) (funcall choose-color "#00F800"))
+	  ((= start 2) (funcall choose-color "#00A4A2"))
+	  ((= start 3) (funcall choose-color "#4179B2"))
+          ((= start 4) (funcall choose-color "#555AB4"))
+	  ((= start 5) (funcall choose-color "#C22E9C"))
+	  ((= start 6) (funcall choose-color "#E02C98"))
+	  ((= start 7) (funcall choose-color "#FE40FD"))
+	  ((= start 8) (funcall choose-color "#E07898")))))
 
 ;for test
-(start-parrot)
+;(start-parrot)
