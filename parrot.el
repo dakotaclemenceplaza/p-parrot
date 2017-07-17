@@ -3,10 +3,10 @@
   (interactive "sf for fast, s for slow, g for goth: ")
   (setq goth nil)
   (setq slow nil)
+  (setq speed 0.07)
   (cond ((string= arg "f") (setq speed 0.03))
-	((string= arg "s") (setq slow 1 speed 0.07))
-	((string= arg "g") (setq goth 1 speed 0.07))
-	(t (setq speed 0.07)))
+	((string= arg "s") (setq slow 1))
+	((string= arg "g") (setq goth 1)))
   ;frame length 
   (setq length 1018 frame 0)
   (switch-to-buffer "Parrot")
@@ -29,8 +29,7 @@
     ;show everything
     (redisplay) 
     ;keeping track of frames
-    (if (= frame 4);
-	(if slow (sleep-for 1)))
+    (if (and slow (= frame 4)) (sleep-for 1))
     (if (= frame 9)
 	(setq frame 0)
       (setq frame (1+ frame))
