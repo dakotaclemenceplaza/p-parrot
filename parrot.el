@@ -32,8 +32,8 @@
     (if (and slow (= frame 4)) (sleep-for 1))
     (if (= frame 9)
 	(setq frame 0)
-      (setq frame (1+ frame))
-      (sleep-for speed))))
+      (setq frame (1+ frame)))
+    (sleep-for speed)))
 
 (defun draw-parrot (frame &optional position)
   (let ((parrotframe (read-frame-from-file frame))
@@ -58,7 +58,7 @@
   (let ((choose-color
 	 (lambda (color)
 	   (add-face-text-property (point-min) (point-max) `(:foreground ,color)))))
-    (cond ((or (= start 0) (= start 10)) (funcall choose-color "#FDFA00"))
+    (cond ((or (= start 0) (= start 9)) (funcall choose-color "#FDFA00"))
 	  ((= start 1) (funcall choose-color "#00F800"))
 	  ((= start 2) (funcall choose-color "#00A4A2"))
 	  ((= start 3) (funcall choose-color "#4179B2"))
