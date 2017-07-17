@@ -44,7 +44,7 @@
 (defun read-frame-from-file ()
   (let ((start (* frame length)))
     (with-temp-buffer
-      (insert-file-contents "parrotframes" nil start (+ start length))
+      (insert-file-contents "~/p-parrot/parrotframes" nil start (+ start length))
       (split-string (buffer-string) "\n" t))))
 
 ;function for color
