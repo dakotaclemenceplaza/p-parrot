@@ -32,7 +32,16 @@
     (sleep-for speed)))
 
 (defun draw-parrot (&optional position)
-  (let ((parrotframe (read-frame-from-file))
+  (let ((parrotframe (cond ((= frame 0) frame-zero)
+			   ((= frame 1) frame-one)
+			   ((= frame 2) frame-two)
+			   ((= frame 3) frame-three)
+			   ((= frame 4) frame-four)
+			   ((= frame 5) frame-five)
+			   ((= frame 6) frame-six)
+			   ((= frame 7) frame-seven)
+			   ((= frame 8) frame-eight)
+			   ((= frame 9) frame-nine)))
 	(draw-frame
 	 (lambda (line-from-frame)
 	   (insert (make-string (- (/ winw 2) 25) ? ))
@@ -40,12 +49,6 @@
 	   (newline))))
     (newline (- (/ winh 2) 10))
     (mapc draw-frame parrotframe)))
-
-(defun read-frame-from-file ()
-  (let ((start (* frame length)))
-    (with-temp-buffer
-      (insert-file-contents "~/p-parrot/parrotframes" nil start (+ start length))
-      (split-string (buffer-string) "\n" t))))
 
 ;function for color
 ;choose-color holds a lambda which takes a color argument depending on frame
@@ -64,6 +67,3 @@
 	    ((= frame 6) (funcall choose-color "#E02C98"))
 	    ((= frame 7) (funcall choose-color "#FE40FD"))
 	    ((= frame 8) (funcall choose-color "#E07898"))))))
-
-;for test
-;(start-parrot)
