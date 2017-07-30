@@ -1,5 +1,8 @@
+;; Frames are lists of strings with the first item being a color for a frame
+
 (setq frame-zero '(
 		   "#FDFA00"
+"                                                  "		   
 "                         .cccc;;cc;';c.           "
 "                      .,:dkdc:;;:c:,:d:.          "
 "                     .loc'.,cc::c:::,..;:.        "
