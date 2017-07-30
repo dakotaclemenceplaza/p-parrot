@@ -3,7 +3,7 @@
 
 (defun p-parrot (&optional arg)
   "Party Parrot"
-  (interactive "sf for fast, s for slow, g for goth, w for wave: ")
+  (interactive "sf for fast, s for slow, g for goth, w for wave or just Enter: ")
   ;;setting various variables
   ;;frames is a list of pairs with a frame number and a count for a pause
   (setq goth nil slow nil wave nil speed 0.07 frames (list (list 0 10)))
@@ -23,7 +23,8 @@
     (sleep-for speed)))
 
 (defun draw-parrot ()
-  (let* ((return-frame
+  (let* (;;return a frame to draw based on frame number
+	 (return-frame
 	  (lambda (parrotframe) (cond ((= (car parrotframe) 0) frame-zero)
 			   ((= (car parrotframe) 1) frame-one)
 			   ((= (car parrotframe) 2) frame-two)
@@ -34,9 +35,12 @@
 			   ((= (car parrotframe) 7) frame-seven)
 			   ((= (car parrotframe) 8) frame-eight)
 			   ((= (car parrotframe) 9) frame-nine))))
-	(draw-line
+	 ;;draw a line from frame. Used with map over a frame
+	 (draw-line
 	 (lambda (line-from-frame)
 	   (if wave (progn (end-of-line)
+			   ;;inserting empty strings for a bit more symmetry
+			   ;;setting p-min and p-max as ranges for colorize
 			   (insert (make-string (/ (- (/ winw 3) 50) 2) ? ))
 			   (setq p-min (point))
 			   (insert line-from-frame)
@@ -48,6 +52,7 @@
 	     (progn (insert (make-string (- (/ winw 2) 25) ? ))
 		    (insert line-from-frame)
 		    (newline)))))
+	;;make a list of frames to draw. Six if drawing a wave, one otherwise
 	(parlist (mapcar return-frame frames))
 	;;keeping track of frames
 	(change-frame
@@ -57,6 +62,7 @@
 		 ((= (car frame) 9) (list 0 (car (cdr frame))))
 		 (t (list (1+ (car frame)) (car (cdr frame))))))))
     ;;end of let*
+    ;;;;;
     (if wave (progn
 	       ;;map over parlist which is a list of six frames
 	       (mapc (lambda (pf)
