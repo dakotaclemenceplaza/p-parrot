@@ -1,5 +1,6 @@
 ;; PARTY PARROT
 ;; Don't forget to load parrotframes.el
+;; for the wave of parrots keep window as big as possible
 
 (defun p-parrot (&optional arg)
   "Party Parrot"
