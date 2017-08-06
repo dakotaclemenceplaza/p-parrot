@@ -103,17 +103,3 @@
     ;;end of if-else
     ;;change frames
     (setq frames (mapcar change-frame frames))))
-
-;;(defun colorize ()
-;;  (if goth
-;;      (add-face-text-property (point-min) (point-max) '(:foreground "#787B80" :weight bold))
-;;    (add-face-text-property p-min p-max `(:foreground ,current-color))))
-
-;;(defun insert-text ()
-  ;;make more newlines for text
-;;  (if wave (progn (goto-char (point-max))
-;;		  (newline (/ (- winh 38) 2)))
-  ;;  (newline (/ (- winh 19) 4)))
-  ;;put text before the bottom end
- ;; (insert (make-string (- (/ winw 2) 5) ? ))
- ;; (insert "C-g to stop"))
