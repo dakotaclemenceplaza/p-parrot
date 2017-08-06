@@ -49,7 +49,7 @@
 			   (insert (make-string (/ (- (/ winw 3) 50) 3) ? ))
 			   (or (= (forward-line) 0)
 			       (newline))
-			   (colorize))
+			   (funcall colorize))
 	     (progn (insert (make-string (- (/ winw 2) 25) ? ))
 		    (insert line-from-frame)
 		    (newline)))))
@@ -91,15 +91,15 @@
 			     ((< (point) 3500) (goto-char (point-max)))
 			     (t (forward-line -19))))
 		     parlist)
-	       (insert-text))
+	       (funcall insert-text))
       ;;else
       (progn (newline (- (/ winh 2) 10))
 	     ;;draw every line from a frame, parlist has only one frame
 	     (mapc draw-line (cdr (car parlist)))
-	     (insert-text)
+	     (funcall insert-text)
 	     ;;set color and range for colorize
 	     (setq current-color (car (car parlist)) p-min (point-min) p-max (point-max))
-	     (colorize)))
+	     (funcall colorize)))
     ;;end of if-else
     ;;change frames
     (setq frames (mapcar change-frame frames))))
