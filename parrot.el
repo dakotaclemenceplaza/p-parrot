@@ -8,7 +8,7 @@
   ;;setting various variables
   ;;frames is a list of pairs with a frame number and a count for a pause
   (setq goth nil slow nil wave nil speed 0.07 frames (list (list 0 10)))
-  (cond ((string= arg "f") (setq speed 0.03))
+  (cond ((string= arg "f") (setq speed 0.04))
 	((string= arg "s") (setq slow 1))
 	((string= arg "g") (setq goth 1))
 	((string= arg "w") (setq wave 1)))
@@ -61,8 +61,24 @@
 	   (cond ((and slow (= (car frame) 4) (> (car (cdr frame)) 0)) (list (car frame) (1- (car (cdr frame)))))
 		 ((and (= (car (cdr frame)) 0) (= (car frame) 3)) (list 4 10))
 		 ((= (car frame) 9) (list 0 (car (cdr frame))))
-		 (t (list (1+ (car frame)) (car (cdr frame))))))))
-    ;;end of let*
+		 (t (list (1+ (car frame)) (car (cdr frame)))))))
+	;;insert text
+	(insert-text
+	 (lambda ()
+	   ;;make more newlines for text
+	   (if wave (progn (goto-char (point-max))
+			   (newline (/ (- winh 38) 2)))
+	     (newline (/ (- winh 19) 4)))
+	   ;;put text before the bottom end
+	   (insert (make-string (- (/ winw 2) 5) ? ))
+	   (insert "C-g to stop")))
+	;;colorize
+	(colorize
+	 (lambda ()
+	   (if goth
+	       (add-face-text-property (point-min) (point-max) '(:foreground "#787B80" :weight bold))
+	     (add-face-text-property p-min p-max `(:foreground ,current-color))))))
+    ;;end of let* definitions
     ;;;;;
     (if wave (progn
 	       ;;map over parlist which is a list of six frames
@@ -88,16 +104,16 @@
     ;;change frames
     (setq frames (mapcar change-frame frames))))
 
-(defun colorize ()
-  (if goth
-      (add-face-text-property (point-min) (point-max) '(:foreground "#787B80" :weight bold))
-    (add-face-text-property p-min p-max `(:foreground ,current-color))))
+;;(defun colorize ()
+;;  (if goth
+;;      (add-face-text-property (point-min) (point-max) '(:foreground "#787B80" :weight bold))
+;;    (add-face-text-property p-min p-max `(:foreground ,current-color))))
 
-(defun insert-text ()
+;;(defun insert-text ()
   ;;make more newlines for text
-  (if wave (progn (goto-char (point-max))
-		  (newline (/ (- winh 38) 2)))
-    (newline (/ (- winh 19) 4)))
+;;  (if wave (progn (goto-char (point-max))
+;;		  (newline (/ (- winh 38) 2)))
+  ;;  (newline (/ (- winh 19) 4)))
   ;;put text before the bottom end
-  (insert (make-string (- (/ winw 2) 5) ? ))
-  (insert "C-g to stop"))
+ ;; (insert (make-string (- (/ winw 2) 5) ? ))
+ ;; (insert "C-g to stop"))
